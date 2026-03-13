@@ -1,0 +1,14 @@
+// Import Vuetify styles
+@import 'vuetify/styles';
+
+// Import Material Design Icons
+@import '@mdi/font/css/materialdesignicons.css';
+
+// Import custom utilities
+@import './utilities.scss';
+
+// Import accessibility styles
+@import './accessibility.scss';
+
+// Import touch target styles (Requirement 4.5)
+@import './touch-targets.scss';

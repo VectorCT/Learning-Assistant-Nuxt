@@ -1,0 +1,274 @@
+// Design Tokens - Mixins
+// Reusable SCSS mixins for consistent styling
+
+@import './variables.scss';
+
+// ============================================
+// Card Styles
+// ============================================
+
+// Base card styling (daily.dev inspired)
+@mixin card-base {
+  background: rgb(var(--v-theme-surface));
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  transition: all $transition-base;
+  
+  .v-theme--dark & {
+    box-shadow: $shadow-dark-md;
+  }
+}
+
+// Card with hover effect
+@mixin card-hover {
+  @include card-base;
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+    
+    .v-theme--dark & {
+      box-shadow: $shadow-dark-lg;
+    }
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Elevated card (more prominent shadow)
+@mixin card-elevated {
+  @include card-base;
+  box-shadow: $shadow-lg;
+  
+  .v-theme--dark & {
+    box-shadow: $shadow-dark-lg;
+  }
+}
+
+// Flat card (minimal shadow)
+@mixin card-flat {
+  background: rgb(var(--v-theme-surface));
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  
+  .v-theme--dark & {
+    box-shadow: $shadow-dark-sm;
+  }
+}
+
+// ============================================
+// Responsive Breakpoint Helpers
+// Aligned with requirements: Mobile (320-767px), Tablet (768-1023px), Desktop (1024px+)
+// ============================================
+
+// Mobile first approach
+@mixin xs {
+  @media (min-width: #{$breakpoint-xs}) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @media (min-width: #{$breakpoint-sm}) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media (min-width: #{$breakpoint-md}) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (min-width: #{$breakpoint-xl}) {
+    @content;
+  }
+}
+
+@mixin xxl {
+  @media (min-width: #{$breakpoint-xxl}) {
+    @content;
+  }
+}
+
+// Max-width breakpoints (for mobile-specific styles)
+@mixin xs-only {
+  @media (max-width: #{$mobile-max}) {
+    @content;
+  }
+}
+
+@mixin sm-only {
+  @media (min-width: #{$tablet-min}) and (max-width: #{$tablet-max}) {
+    @content;
+  }
+}
+
+@mixin md-only {
+  @media (min-width: #{$desktop-min}) and (max-width: #{$breakpoint-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin lg-only {
+  @media (min-width: #{$breakpoint-lg}) and (max-width: #{$breakpoint-xl - 1px}) {
+    @content;
+  }
+}
+
+@mixin xl-only {
+  @media (min-width: #{$breakpoint-xl}) and (max-width: #{$breakpoint-xxl - 1px}) {
+    @content;
+  }
+}
+
+// Semantic device-specific mixins (Requirements 4.1, 4.2, 4.3)
+@mixin mobile {
+  @media (max-width: #{$mobile-max}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-min}) and (max-width: #{$tablet-max}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-min}) {
+    @content;
+  }
+}
+
+// Mobile and tablet combined
+@mixin mobile-tablet {
+  @media (max-width: #{$tablet-max}) {
+    @content;
+  }
+}
+
+// Tablet and desktop combined
+@mixin tablet-desktop {
+  @media (min-width: #{$tablet-min}) {
+    @content;
+  }
+}
+
+// ============================================
+// Utility Mixins
+// ============================================
+
+// Flexbox centering
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flexbox column centering
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+// Truncate text with ellipsis
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Multi-line text truncation
+@mixin text-truncate-lines($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Focus visible styles (accessibility)
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 2px solid rgb(var(--v-theme-primary));
+    outline-offset: 2px;
+  }
+}
+
+// Smooth scrolling container
+@mixin smooth-scroll {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgb(var(--v-theme-surface-variant));
+    border-radius: $radius-full;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgb(var(--v-theme-outline));
+    border-radius: $radius-full;
+    
+    &:hover {
+      background: rgb(var(--v-theme-outline-variant));
+    }
+  }
+}
+
+// ============================================
+// Touch Target Mixins (Requirement 4.5)
+// ============================================
+
+// Ensure minimum touch target size (44px minimum for WCAG 2.1 AA)
+@mixin touch-target-min {
+  min-width: $touch-target-min;
+  min-height: $touch-target-min;
+}
+
+// Comfortable touch target size (48px)
+@mixin touch-target-comfortable {
+  min-width: $touch-target-comfortable;
+  min-height: $touch-target-comfortable;
+}
+
+// Large touch target size (56px)
+@mixin touch-target-large {
+  min-width: $touch-target-large;
+  min-height: $touch-target-large;
+}
+
+// Apply touch target sizing on mobile only
+@mixin touch-target-mobile {
+  @include mobile {
+    @include touch-target-min;
+  }
+}
+
+// Touch-friendly spacing between interactive elements
+@mixin touch-spacing {
+  @include mobile {
+    gap: $touch-spacing-sm;
+    
+    > * + * {
+      margin-left: $touch-spacing-sm;
+    }
+  }
+}

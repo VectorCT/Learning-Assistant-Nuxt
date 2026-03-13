@@ -1,0 +1,229 @@
+// Accessibility Styles
+// Keyboard navigation, focus indicators, and WCAG compliance
+
+// ============================================
+// Focus Indicators
+// ============================================
+
+// Enhanced focus styles for keyboard navigation
+*:focus-visible {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+// Remove default outline for mouse users
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// Button focus styles
+.v-btn:focus-visible {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+}
+
+// Card focus styles
+.v-card:focus-visible {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(var(--v-theme-primary), 0.2);
+}
+
+// Link focus styles
+a:focus-visible {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+// Input focus styles
+.v-field:focus-within {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 1px;
+}
+
+// Navigation item focus
+.v-list-item:focus-visible {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: -3px;
+}
+
+// ============================================
+// Skip Links
+// ============================================
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  z-index: 9999;
+  font-weight: 600;
+  
+  &:focus {
+    top: 0;
+  }
+}
+
+// ============================================
+// Screen Reader Only
+// ============================================
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+// ============================================
+// Reduced Motion
+// ============================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// ============================================
+// High Contrast Mode Support
+// ============================================
+
+@media (prefers-contrast: high) {
+  *:focus-visible {
+    outline-width: 4px;
+    outline-offset: 3px;
+  }
+  
+  .v-btn {
+    border: 2px solid currentColor;
+  }
+  
+  .v-card {
+    border: 2px solid rgb(var(--v-theme-on-surface));
+  }
+}
+
+// ============================================
+// Touch Target Sizes (Minimum 44x44px)
+// ============================================
+
+// Ensure all interactive elements meet minimum touch target size
+.v-btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.v-icon-btn,
+.v-btn--icon {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.v-checkbox,
+.v-radio {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+// ============================================
+// Keyboard Navigation Helpers
+// ============================================
+
+// Add visual indicator for keyboard-navigable elements
+[tabindex]:not([tabindex="-1"]) {
+  cursor: pointer;
+}
+
+// Ensure interactive elements are keyboard accessible
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[role="link"] {
+  &:focus-visible {
+    outline: 3px solid rgb(var(--v-theme-primary));
+    outline-offset: 2px;
+  }
+}
+
+// ============================================
+// Color Contrast Helpers
+// ============================================
+
+// Ensure text has sufficient contrast
+.text-low-contrast {
+  color: rgb(var(--v-theme-on-surface-variant));
+  
+  // Increase contrast in light theme
+  .v-theme--light & {
+    color: rgba(0, 0, 0, 0.7);
+  }
+  
+  // Increase contrast in dark theme
+  .v-theme--dark & {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+// ============================================
+// Focus Trap for Modals
+// ============================================
+
+.v-dialog,
+.v-menu {
+  &:focus {
+    outline: none;
+  }
+  
+  // First and last focusable elements in modal
+  .focus-trap-start,
+  .focus-trap-end {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+// ============================================
+// ARIA Live Regions
+// ============================================
+
+[aria-live] {
+  position: relative;
+}
+
+// Visually hidden but announced by screen readers
+.aria-live-region {
+  @extend .sr-only;
+}

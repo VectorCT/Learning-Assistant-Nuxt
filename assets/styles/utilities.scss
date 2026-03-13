@@ -1,0 +1,382 @@
+// Responsive Utility Classes
+// Provides helper classes for responsive design across mobile, tablet, and desktop
+
+@import './variables.scss';
+@import './mixins.scss';
+
+// ============================================
+// Display Utilities
+// ============================================
+
+// Hide on specific devices
+.hide-on-mobile {
+  @include mobile {
+    display: none !important;
+  }
+}
+
+.hide-on-tablet {
+  @include tablet {
+    display: none !important;
+  }
+}
+
+.hide-on-desktop {
+  @include desktop {
+    display: none !important;
+  }
+}
+
+// Show only on specific devices
+.show-on-mobile-only {
+  display: none !important;
+  
+  @include mobile {
+    display: block !important;
+  }
+}
+
+.show-on-tablet-only {
+  display: none !important;
+  
+  @include tablet {
+    display: block !important;
+  }
+}
+
+.show-on-desktop-only {
+  display: none !important;
+  
+  @include desktop {
+    display: block !important;
+  }
+}
+
+// ============================================
+// Spacing Utilities (Responsive)
+// ============================================
+
+// Responsive padding
+.p-mobile {
+  @include mobile {
+    padding: $spacing-md !important;
+  }
+}
+
+.p-tablet {
+  @include tablet {
+    padding: $spacing-lg !important;
+  }
+}
+
+.p-desktop {
+  @include desktop {
+    padding: $spacing-xl !important;
+  }
+}
+
+// Responsive margin
+.m-mobile {
+  @include mobile {
+    margin: $spacing-md !important;
+  }
+}
+
+.m-tablet {
+  @include tablet {
+    margin: $spacing-lg !important;
+  }
+}
+
+.m-desktop {
+  @include desktop {
+    margin: $spacing-xl !important;
+  }
+}
+
+// ============================================
+// Container Utilities
+// ============================================
+
+// Responsive container with max-width
+.container-responsive {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $spacing-md;
+  padding-right: $spacing-md;
+  
+  @include tablet {
+    padding-left: $spacing-lg;
+    padding-right: $spacing-lg;
+    max-width: 960px;
+  }
+  
+  @include desktop {
+    padding-left: $spacing-xl;
+    padding-right: $spacing-xl;
+    max-width: 1200px;
+  }
+  
+  @include lg {
+    max-width: 1400px;
+  }
+}
+
+// Full-width container (no max-width)
+.container-fluid {
+  width: 100%;
+  padding-left: $spacing-md;
+  padding-right: $spacing-md;
+  
+  @include tablet {
+    padding-left: $spacing-lg;
+    padding-right: $spacing-lg;
+  }
+  
+  @include desktop {
+    padding-left: $spacing-xl;
+    padding-right: $spacing-xl;
+  }
+}
+
+// ============================================
+// Grid Utilities
+// ============================================
+
+// Responsive grid
+.grid-responsive {
+  display: grid;
+  gap: $spacing-md;
+  
+  // Mobile: 1 column
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+  
+  // Tablet: 2 columns
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-lg;
+  }
+  
+  // Desktop: 3 columns
+  @include desktop {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-xl;
+  }
+}
+
+// 2-column grid (mobile: 1, tablet+: 2)
+.grid-2-col {
+  display: grid;
+  gap: $spacing-md;
+  grid-template-columns: 1fr;
+  
+  @include tablet-desktop {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-lg;
+  }
+}
+
+// 4-column grid (mobile: 1, tablet: 2, desktop: 4)
+.grid-4-col {
+  display: grid;
+  gap: $spacing-md;
+  grid-template-columns: 1fr;
+  
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-lg;
+  }
+  
+  @include desktop {
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-xl;
+  }
+}
+
+// ============================================
+// Flexbox Utilities
+// ============================================
+
+// Responsive flex direction
+.flex-mobile-column {
+  display: flex;
+  
+  @include mobile {
+    flex-direction: column;
+  }
+  
+  @include tablet-desktop {
+    flex-direction: row;
+  }
+}
+
+.flex-tablet-column {
+  display: flex;
+  
+  @include mobile-tablet {
+    flex-direction: column;
+  }
+  
+  @include desktop {
+    flex-direction: row;
+  }
+}
+
+// ============================================
+// Typography Utilities
+// ============================================
+
+// Responsive text alignment
+.text-mobile-center {
+  @include mobile {
+    text-align: center !important;
+  }
+}
+
+.text-tablet-left {
+  @include tablet-desktop {
+    text-align: left !important;
+  }
+}
+
+// Responsive font sizes
+.text-responsive-sm {
+  font-size: 0.875rem;
+  
+  @include tablet {
+    font-size: 0.9375rem;
+  }
+  
+  @include desktop {
+    font-size: 1rem;
+  }
+}
+
+.text-responsive-base {
+  font-size: 1rem;
+  
+  @include tablet {
+    font-size: 1.0625rem;
+  }
+  
+  @include desktop {
+    font-size: 1.125rem;
+  }
+}
+
+.text-responsive-lg {
+  font-size: 1.125rem;
+  
+  @include tablet {
+    font-size: 1.25rem;
+  }
+  
+  @include desktop {
+    font-size: 1.5rem;
+  }
+}
+
+.text-responsive-xl {
+  font-size: 1.5rem;
+  
+  @include tablet {
+    font-size: 1.875rem;
+  }
+  
+  @include desktop {
+    font-size: 2.25rem;
+  }
+}
+
+// ============================================
+// Touch Target Utilities (Requirement 4.5)
+// ============================================
+
+// Ensure minimum 44px touch targets on mobile (WCAG 2.1 AA)
+.touch-target {
+  @include mobile {
+    min-height: $touch-target-min;
+    min-width: $touch-target-min;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// Comfortable touch target (48px)
+.touch-target-comfortable {
+  @include mobile {
+    min-height: $touch-target-comfortable;
+    min-width: $touch-target-comfortable;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// Large touch target (56px)
+.touch-target-large {
+  @include mobile {
+    min-height: $touch-target-large;
+    min-width: $touch-target-large;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// Touch-friendly spacing between interactive elements
+.touch-spacing {
+  @include mobile {
+    gap: $touch-spacing-sm;
+  }
+}
+
+.touch-spacing-md {
+  @include mobile {
+    gap: $touch-spacing-md;
+  }
+}
+
+.touch-spacing-lg {
+  @include mobile {
+    gap: $touch-spacing-lg;
+  }
+}
+
+// ============================================
+// Width Utilities
+// ============================================
+
+// Responsive widths
+.w-mobile-full {
+  @include mobile {
+    width: 100% !important;
+  }
+}
+
+.w-tablet-auto {
+  @include tablet-desktop {
+    width: auto !important;
+  }
+}
+
+// ============================================
+// Height Utilities
+// ============================================
+
+// Responsive heights
+.h-mobile-auto {
+  @include mobile {
+    height: auto !important;
+  }
+}
+
+.h-desktop-full {
+  @include desktop {
+    height: 100% !important;
+  }
+}

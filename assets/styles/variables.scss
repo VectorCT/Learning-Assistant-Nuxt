@@ -1,0 +1,91 @@
+// Design Tokens - Variables
+// Aligned with Vuetify theme and daily.dev aesthetic
+
+// ============================================
+// Spacing Scale (8px base unit)
+// ============================================
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+$spacing-3xl: 64px;
+
+// ============================================
+// Border Radius
+// ============================================
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-2xl: 24px;
+$radius-full: 9999px;
+
+// ============================================
+// Shadows (Material Design 3 inspired)
+// ============================================
+// Light theme shadows
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+// Dark theme shadows (more prominent)
+$shadow-dark-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+$shadow-dark-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+$shadow-dark-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+$shadow-dark-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+$shadow-dark-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+
+// ============================================
+// Z-Index Scale
+// ============================================
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-popover: 1060;
+$z-tooltip: 1070;
+
+// ============================================
+// Touch Targets (Requirement 4.5)
+// ============================================
+// Minimum touch target size for mobile accessibility
+$touch-target-min: 44px;
+$touch-target-comfortable: 48px;
+$touch-target-large: 56px;
+
+// Touch-friendly spacing for mobile layouts
+$touch-spacing-xs: 8px;
+$touch-spacing-sm: 12px;
+$touch-spacing-md: 16px;
+$touch-spacing-lg: 24px;
+
+// ============================================
+// Transitions
+// ============================================
+$transition-fast: 150ms ease-in-out;
+$transition-base: 200ms ease-in-out;
+$transition-slow: 300ms ease-in-out;
+
+// ============================================
+// Breakpoints (aligned with Vuetify display configuration)
+// Mobile: 320-767px (xs)
+// Tablet: 768-1023px (sm)
+// Desktop: 1024px+ (md and above)
+// ============================================
+$breakpoint-xs: 0;
+$breakpoint-sm: 768px;   // Tablet starts here
+$breakpoint-md: 1024px;  // Desktop starts here
+$breakpoint-lg: 1280px;
+$breakpoint-xl: 1920px;
+$breakpoint-xxl: 2560px;
+
+// Semantic breakpoint names
+$mobile-max: 767px;      // Max width for mobile
+$tablet-min: 768px;      // Min width for tablet
+$tablet-max: 1023px;     // Max width for tablet
+$desktop-min: 1024px;    // Min width for desktop

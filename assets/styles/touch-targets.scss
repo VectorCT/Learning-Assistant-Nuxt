@@ -1,0 +1,193 @@
+// Touch Target Enhancements (Requirement 4.5)
+// Ensures all interactive elements meet the 44px minimum touch target size on mobile devices
+
+@import './variables.scss';
+@import './mixins.scss';
+
+// ============================================
+// Global Touch Target Styles
+// ============================================
+
+// Apply to all buttons on mobile
+@include mobile {
+  // Vuetify buttons
+  .v-btn {
+    min-height: $touch-target-min !important;
+    min-width: $touch-target-min !important;
+    
+    // Small buttons should still meet minimum
+    &.v-btn--size-small {
+      min-height: $touch-target-min !important;
+      min-width: $touch-target-min !important;
+      padding: 0 12px !important;
+    }
+    
+    // Icon buttons need special attention
+    &.v-btn--icon {
+      min-width: $touch-target-min !important;
+      min-height: $touch-target-min !important;
+      width: $touch-target-min !important;
+      height: $touch-target-min !important;
+    }
+  }
+  
+  // App bar navigation icon
+  .v-app-bar-nav-icon {
+    min-width: $touch-target-min !important;
+    min-height: $touch-target-min !important;
+    width: $touch-target-comfortable !important;
+    height: $touch-target-comfortable !important;
+  }
+  
+  // List items
+  .v-list-item {
+    min-height: $touch-target-comfortable !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  
+  // Chips (when clickable)
+  .v-chip--clickable,
+  .v-chip[role="button"] {
+    min-height: $touch-target-min !important;
+    padding: 0 16px !important;
+  }
+  
+  // Radio buttons and checkboxes
+  .v-radio,
+  .v-checkbox {
+    .v-selection-control__wrapper {
+      min-width: $touch-target-min !important;
+      min-height: $touch-target-min !important;
+    }
+  }
+  
+  // Icon buttons in various contexts
+  .v-icon-btn,
+  button[class*="icon"],
+  [role="button"] .v-icon {
+    min-width: $touch-target-min !important;
+    min-height: $touch-target-min !important;
+  }
+  
+  // Tabs
+  .v-tab {
+    min-height: $touch-target-comfortable !important;
+    padding: 0 16px !important;
+  }
+  
+  // Button toggle
+  .v-btn-toggle .v-btn {
+    min-height: $touch-target-min !important;
+    min-width: $touch-target-min !important;
+  }
+  
+  // Pagination buttons
+  .v-pagination__item,
+  .v-pagination__navigation {
+    min-width: $touch-target-min !important;
+    min-height: $touch-target-min !important;
+  }
+  
+  // Menu activators
+  .v-menu > .v-overlay__content {
+    .v-list-item {
+      min-height: $touch-target-comfortable !important;
+    }
+  }
+  
+  // Card actions
+  .v-card-actions {
+    padding: 12px 16px !important;
+    gap: $touch-spacing-sm;
+    
+    .v-btn {
+      min-height: $touch-target-min !important;
+    }
+  }
+  
+  // Ensure spacing between adjacent interactive elements
+  .v-btn + .v-btn,
+  .v-chip + .v-chip,
+  button + button {
+    margin-left: $touch-spacing-sm;
+  }
+  
+  // Form controls
+  .v-input {
+    .v-field__append-inner,
+    .v-field__prepend-inner {
+      button,
+      .v-icon {
+        min-width: $touch-target-min !important;
+        min-height: $touch-target-min !important;
+      }
+    }
+  }
+  
+  // Breadcrumbs
+  .v-breadcrumbs-item {
+    min-height: $touch-target-min !important;
+    padding: 0 8px !important;
+  }
+  
+  // Expansion panels
+  .v-expansion-panel-title {
+    min-height: $touch-target-comfortable !important;
+    padding: 12px 16px !important;
+  }
+  
+  // Snackbar actions
+  .v-snackbar__actions {
+    .v-btn {
+      min-height: $touch-target-min !important;
+    }
+  }
+  
+  // Dialog actions
+  .v-dialog {
+    .v-card-actions {
+      .v-btn {
+        min-height: $touch-target-min !important;
+        min-width: $touch-target-min !important;
+      }
+    }
+  }
+  
+  // Data table actions
+  .v-data-table {
+    .v-btn--icon {
+      min-width: $touch-target-min !important;
+      min-height: $touch-target-min !important;
+    }
+  }
+  
+  // Avatar buttons
+  .v-avatar[role="button"],
+  button .v-avatar {
+    min-width: $touch-target-min !important;
+    min-height: $touch-target-min !important;
+  }
+}
+
+// ============================================
+// Tablet-specific adjustments
+// ============================================
+@include tablet {
+  // Slightly larger touch targets for tablet
+  .v-btn {
+    min-height: $touch-target-comfortable !important;
+  }
+  
+  .v-list-item {
+    min-height: $touch-target-comfortable !important;
+  }
+}
+
+// ============================================
+// Desktop - no touch target overrides needed
+// ============================================
+@include desktop {
+  // Desktop can use default sizes
+  // Touch target requirements don't apply
+}
