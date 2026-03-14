@@ -5,11 +5,11 @@
       Skip to main content
     </a>
 
-    <!-- App Header -->
-    <AppHeader v-if="!isAuthPage" @toggle-sidebar="toggleSidebar" />
-
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar Navigation (rendered first for proper layout) -->
     <AppSidebar v-if="!isAuthPage" ref="sidebarRef" />
+
+    <!-- App Header (will automatically position next to sidebar) -->
+    <AppHeader v-if="!isAuthPage" @toggle-sidebar="toggleSidebar" />
 
     <!-- Main Content Area with Swipe Support -->
     <v-main 
@@ -137,6 +137,24 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
+// Prevent white flash before Vuetify initializes
+// The inline script in nuxt.config sets app-dark/app-light class on <html>
+:global(html.app-dark) {
+  background-color: #0F172A !important;
+  color: #E2E8F0;
+}
+
+:global(html.app-light) {
+  background-color: #F8FAFC !important;
+  color: #1E293B;
+}
+
+// Ensure v-app spans full viewport height
+:deep(.v-application) {
+  min-height: 100vh;
+  height: 100%;
+}
+
 // Main content area styling with mobile optimizations
 .main-content {
   min-height: 100vh;

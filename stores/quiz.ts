@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { parseOptions } from './questions'
 
 interface QuizState {
   currentChapterId: string | null
@@ -49,7 +50,28 @@ export const useQuizStore = defineStore('quiz', {
       const api = useApi()
       
       try {
-        const questions = await api.getQuizByChapter(chapterId)
+        const rawQuestions = await api.getQuizByChapter(chapterId)
+        
+        // Map questions to extract options from answers
+        const questions = rawQuestions.map((q: any) => {
+          const answer = q.answers?.[0] || q.answer || {}
+          let options = answer.options || q.options || []
+          
+          options = parseOptions(options)
+          
+          // Generate options for TrueFalse
+          if (answer.answerType === 'TrueFalse' && (!options || options.length === 0)) {
+            options = ['True', 'False']
+          }
+          
+          return {
+            ...q,
+            options: Array.isArray(options) ? options : [],
+            maxSelections: q.maxSelections || 1,
+            pointValue: q.pointValue || q.points || 1,
+            answerType: answer.answerType || q.answerType || 'MultipleChoice'
+          }
+        })
         
         this.currentChapterId = chapterId
         this.questionIds = questions.map((q: any) => q.id)

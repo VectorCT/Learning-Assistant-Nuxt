@@ -85,6 +85,13 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'apple-touch-icon', href: '/icon-192x192.png' }
+      ],
+      script: [
+        {
+          innerHTML: "(function(){try{var t=localStorage.getItem('theme')||'dark';if(t==='dark'){document.documentElement.style.backgroundColor='#0F172A';document.documentElement.style.color='#E2E8F0';document.documentElement.classList.add('app-dark')}else{document.documentElement.style.backgroundColor='#F8FAFC';document.documentElement.style.color='#1E293B';document.documentElement.classList.add('app-light')}}catch(e){document.documentElement.style.backgroundColor='#0F172A';document.documentElement.classList.add('app-dark')}})()",
+          type: 'text/javascript',
+          tagPosition: 'head'
+        }
       ]
     }
   },

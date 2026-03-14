@@ -88,10 +88,10 @@ const darkTheme: ThemeDefinition = {
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
-  // Get saved theme preference from localStorage or default to light
+  // Get saved theme preference from localStorage or default to dark
   const savedTheme = process.client 
-    ? localStorage.getItem('theme') || 'light'
-    : 'light'
+    ? localStorage.getItem('theme') || 'dark'
+    : 'dark'
 
   const vuetify = createVuetify({
     components,
@@ -157,7 +157,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         rounded: 'lg',
       },
       VListItem: {
-        minHeight: 48, // Comfortable touch target for list items
+        minHeight: 40, // Compact touch target for list items
       },
       VCheckbox: {
         density: 'comfortable', // Ensures adequate spacing
@@ -172,6 +172,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Watch for theme changes and persist to localStorage
   if (process.client) {
+    // Clean up the FOUC-prevention classes now that Vuetify is in control
+    document.documentElement.classList.remove('app-dark', 'app-light')
+    document.documentElement.style.removeProperty('background-color')
+    document.documentElement.style.removeProperty('color')
+
     watch(
       () => vuetify.theme.global.name.value,
       (newTheme) => {

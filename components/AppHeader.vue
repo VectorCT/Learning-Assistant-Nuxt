@@ -7,18 +7,22 @@
     role="banner"
     aria-label="Main navigation header"
   >
-    <!-- Mobile Menu Toggle (only on mobile) -->
-    <template v-if="mobile" #prepend>
-      <v-app-bar-nav-icon 
-        @click="$emit('toggle-sidebar')"
-        aria-label="Toggle navigation menu"
-      />
+    <!-- Sidebar Toggle (Desktop) - Replaces mobile menu toggle -->
+    <template #prepend>
+      <v-btn
+        icon
+        @click="handleToggleSidebar"
+        :aria-label="'Toggle navigation menu'"
+        class="sidebar-toggle-btn"
+      >
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
     </template>
 
     <!-- App Title/Logo -->
     <v-toolbar-title class="font-weight-bold d-flex align-center">
       <v-icon color="primary" size="28" class="mr-2" aria-hidden="true">mdi-school</v-icon>
-      <span v-if="!mobile">SA Learner</span>
+      <span>SA Learner</span>
     </v-toolbar-title>
 
     <v-spacer />
@@ -35,6 +39,107 @@
         {{ theme.global.name.value === 'dark' ? 'Light Mode' : 'Dark Mode' }}
       </v-tooltip>
     </v-btn>
+
+    <!-- Notification Bell with Message Tray -->
+    <v-menu
+      v-if="user"
+      v-model="notifMenu"
+      :close-on-content-click="false"
+      location="bottom end"
+      offset="8"
+      max-width="380"
+    >
+      <template #activator="{ props }">
+        <v-btn
+          v-bind="props"
+          icon
+          variant="text"
+          class="ml-1"
+          aria-label="Notifications"
+        >
+          <v-badge
+            v-if="messagesStore.unreadCount > 0"
+            :content="messagesStore.unreadCount"
+            color="error"
+            floating
+          >
+            <v-icon>mdi-bell</v-icon>
+          </v-badge>
+          <v-icon v-else>mdi-bell-outline</v-icon>
+          <v-tooltip activator="parent" location="bottom">
+            {{ messagesStore.unreadCount > 0 ? `${messagesStore.unreadCount} new notifications` : 'No new notifications' }}
+          </v-tooltip>
+        </v-btn>
+      </template>
+
+      <!-- Notification Tray -->
+      <v-card min-width="320" max-width="380" class="notification-tray">
+        <v-card-title class="d-flex align-center justify-space-between py-3 px-4">
+          <span class="text-subtitle-1 font-weight-bold">Notifications</span>
+          <v-btn
+            v-if="messagesStore.unreadCount > 0"
+            variant="text"
+            size="small"
+            color="primary"
+            @click="messagesStore.markAllAsRead()"
+          >
+            Mark all read
+          </v-btn>
+        </v-card-title>
+
+        <v-divider />
+
+        <v-list
+          v-if="messagesStore.sortedMessages.length > 0"
+          class="py-0 notification-list"
+          lines="three"
+        >
+          <template v-for="(msg, i) in messagesStore.sortedMessages" :key="msg.id">
+            <v-list-item
+              :class="{ 'unread-message': !msg.read }"
+              class="px-4 py-2"
+              @click="messagesStore.markAsRead(msg.id)"
+            >
+              <template #prepend>
+                <v-icon
+                  :color="getMessageIconColor(msg.type)"
+                  size="24"
+                  class="mr-3"
+                >
+                  {{ getMessageIcon(msg.type) }}
+                </v-icon>
+              </template>
+              <v-list-item-title class="text-body-2 font-weight-medium">
+                {{ msg.title }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="text-caption mt-1" style="white-space: normal;">
+                {{ msg.body }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle class="text-caption mt-1" style="opacity: 0.6;">
+                {{ formatTimeAgo(msg.createdAt) }}
+              </v-list-item-subtitle>
+              <template #append>
+                <v-btn
+                  icon
+                  variant="text"
+                  size="x-small"
+                  @click.stop="messagesStore.removeMessage(msg.id)"
+                  aria-label="Dismiss notification"
+                >
+                  <v-icon size="16">mdi-close</v-icon>
+                </v-btn>
+              </template>
+            </v-list-item>
+            <v-divider v-if="i < messagesStore.sortedMessages.length - 1" />
+          </template>
+        </v-list>
+
+        <div v-else class="pa-6 text-center">
+          <v-icon size="40" color="secondary" class="mb-2">mdi-bell-check-outline</v-icon>
+          <p class="text-body-2 text-medium-emphasis">You're all caught up</p>
+        </div>
+      </v-card>
+    </v-menu>
 
     <!-- User Avatar with Dropdown Menu -->
     <v-menu
@@ -145,9 +250,10 @@
 <script setup lang="ts">
 import { useDisplay, useTheme } from 'vuetify'
 import { useAuthStore } from '~/stores/auth'
+import { useMessagesStore } from '~/stores/messages'
 
 // Emits
-defineEmits<{
+const emit = defineEmits<{
   'toggle-sidebar': []
 }>()
 
@@ -155,7 +261,11 @@ defineEmits<{
 const theme = useTheme()
 const { mobile } = useDisplay()
 const authStore = useAuthStore()
+const messagesStore = useMessagesStore()
 const router = useRouter()
+
+// State
+const notifMenu = ref(false)
 
 // Computed
 const user = computed(() => authStore.user)
@@ -176,9 +286,45 @@ const toggleTheme = () => {
   theme.global.name.value = theme.global.name.value === 'dark' ? 'light' : 'dark'
 }
 
+const handleToggleSidebar = () => {
+  emit('toggle-sidebar')
+}
+
 const handleLogout = async () => {
   authStore.logout()
   await router.push('/login')
+}
+
+// Notification helpers
+const getMessageIcon = (type: string) => {
+  const icons: Record<string, string> = {
+    info: 'mdi-information',
+    achievement: 'mdi-trophy',
+    reminder: 'mdi-clock-alert',
+    system: 'mdi-cog'
+  }
+  return icons[type] || 'mdi-bell'
+}
+
+const getMessageIconColor = (type: string) => {
+  const colors: Record<string, string> = {
+    info: 'info',
+    achievement: 'warning',
+    reminder: 'error',
+    system: 'primary'
+  }
+  return colors[type] || 'secondary'
+}
+
+const formatTimeAgo = (dateStr: string) => {
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'Just now'
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  return `${days}d ago`
 }
 </script>
 
@@ -190,8 +336,12 @@ const handleLogout = async () => {
   border-bottom: 1px solid rgb(var(--v-theme-outline));
   
   :deep(.v-toolbar__content) {
-    padding-left: 16px;
+    padding-left: 8px;
     padding-right: 16px;
+  }
+  
+  .sidebar-toggle-btn {
+    margin-right: 8px;
   }
   
   // Ensure touch targets on mobile
@@ -210,7 +360,7 @@ const handleLogout = async () => {
     }
     
     // Larger touch target for menu toggle
-    :deep(.v-app-bar-nav-icon) {
+    .sidebar-toggle-btn {
       min-width: $touch-target-comfortable;
       min-height: $touch-target-comfortable;
       transition: all $transition-fast;
@@ -296,6 +446,18 @@ const handleLogout = async () => {
 :deep(.v-list) {
   @include mobile {
     contain: layout style;
+  }
+}
+
+// Notification tray styles
+.notification-tray {
+  .notification-list {
+    max-height: 360px;
+    overflow-y: auto;
+  }
+
+  .unread-message {
+    background-color: rgb(var(--v-theme-primary), 0.06);
   }
 }
 

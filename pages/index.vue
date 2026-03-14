@@ -4,64 +4,67 @@
     <section class="hero-section" aria-labelledby="hero-title">
       <v-container class="hero-container">
         <v-row align="center" justify="center">
-          <v-col cols="12" md="10" lg="8" class="text-center">
-            <!-- Hero Badge -->
-            <v-chip
-              color="primary"
-              variant="tonal"
-              size="small"
-              class="hero-badge mb-4"
-              prepend-icon="mdi-school"
-            >
-              Grades 8-12 Learning Platform
+          <v-col cols="12" md="7" class="hero-text">
+            <v-chip color="primary" variant="tonal" size="small" class="hero-badge mb-3" prepend-icon="mdi-school">
+              Grades 8–12 · South Africa
             </v-chip>
 
-            <!-- Hero Title -->
-            <h1 id="hero-title" class="hero-title text-h2 text-md-h1 font-weight-bold mb-4">
-              Master Your Studies with
-              <span class="text-primary">SA Learner Assistant</span>
+            <h1 id="hero-title" class="hero-title text-h3 text-md-h2 font-weight-bold mb-3">
+              Your study companion for
+              <span class="gradient-text">matric success</span>
             </h1>
 
-            <!-- Hero Description -->
-            <p class="hero-description text-h6 text-md-h5 mb-8">
-              Your comprehensive educational platform for South African high school learners.
-              Access interactive quizzes, study materials, and community support.
+            <p class="hero-description text-body-1 text-md-h6 text-medium-emphasis mb-6">
+              Quizzes, past papers, video tutorials, interactive games, and career guidance — everything you need in one place.
             </p>
 
-            <!-- Grade Selection -->
-            <div class="grade-selector mb-6">
-              <p class="text-subtitle-1 mb-3 font-weight-medium">Select Your Grade</p>
-              <v-btn-toggle
-                v-model="selectedGrade"
-                color="primary"
-                mandatory
-                rounded="lg"
-                class="grade-toggle"
-                aria-label="Select your grade level"
-              >
-                <v-btn
-                  v-for="grade in grades"
-                  :key="grade"
-                  :value="grade"
-                  :aria-label="`Grade ${grade}`"
-                  size="large"
-                >
-                  Grade {{ grade }}
-                </v-btn>
-              </v-btn-toggle>
+            <div class="d-flex flex-wrap ga-3 mb-6">
+              <v-btn color="primary" size="large" to="/subjects" prepend-icon="mdi-rocket-launch" class="hero-cta">
+                Start Learning
+              </v-btn>
+              <v-btn variant="outlined" size="large" to="/past-papers" prepend-icon="mdi-file-document">
+                Past Papers
+              </v-btn>
             </div>
+          </v-col>
 
-            <!-- CTA Button -->
-            <v-btn
-              color="primary"
-              size="x-large"
-              :to="`/subjects?grade=${selectedGrade}`"
-              class="hero-cta"
-              prepend-icon="mdi-rocket-launch"
-              aria-label="Start learning by browsing subjects"
+          <v-col cols="12" md="5" class="d-none d-md-flex justify-center">
+            <div class="hero-illustration">
+              <div class="illustration-circle">
+                <v-icon size="100" color="primary">mdi-school</v-icon>
+              </div>
+              <div class="floating-chip chip-1">
+                <v-chip size="small" color="success" variant="elevated" prepend-icon="mdi-check-circle">Quiz Passed</v-chip>
+              </div>
+              <div class="floating-chip chip-2">
+                <v-chip size="small" color="warning" variant="elevated" prepend-icon="mdi-trophy">Top 10%</v-chip>
+              </div>
+              <div class="floating-chip chip-3">
+                <v-chip size="small" color="info" variant="elevated" prepend-icon="mdi-fire">5 Day Streak</v-chip>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </section>
+
+    <!-- Quick Access Grid -->
+    <section class="quick-access-section" aria-labelledby="quick-title">
+      <v-container>
+        <h2 id="quick-title" class="text-h4 font-weight-bold mb-5">Jump right in</h2>
+        <v-row>
+          <v-col v-for="item in quickAccess" :key="item.title" cols="6" sm="4" md="2">
+            <v-card
+              :to="item.to"
+              class="quick-card text-center pa-4 h-100"
+              hover
+              :ripple="true"
             >
-              Start Learning
-            </v-btn>
+              <div class="quick-icon-wrap mb-2" :style="{ background: item.bg }">
+                <v-icon size="28" :color="item.iconColor || 'white'">{{ item.icon }}</v-icon>
+              </div>
+              <p class="text-caption font-weight-medium">{{ item.title }}</p>
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -70,76 +73,60 @@
     <!-- Features Section -->
     <section class="features-section" aria-labelledby="features-title">
       <v-container>
-        <div class="text-center mb-8">
-          <h2 id="features-title" class="text-h3 font-weight-bold mb-3">
-            Everything You Need to Excel
-          </h2>
-          <p class="text-h6 text-medium-emphasis">
-            Explore our comprehensive learning tools designed for your success
-          </p>
+        <div class="text-center mb-6">
+          <h2 id="features-title" class="text-h4 font-weight-bold mb-2">Everything you need to excel</h2>
+          <p class="text-body-1 text-medium-emphasis">Tools designed for South African learners</p>
         </div>
 
-        <!-- Feature Cards Grid -->
-        <v-row class="features-grid">
-          <v-col
-            v-for="feature in features"
-            :key="feature.title"
-            cols="12"
-            sm="6"
-            md="4"
-            class="feature-col"
-          >
-            <ContentCard
-              :title="feature.title"
-              :description="feature.description"
-              :icon="feature.icon"
-              :icon-color="feature.iconColor"
-              :to="feature.route"
-              :clickable="true"
-            >
-              <template #actions>
-                <v-btn
-                  variant="text"
-                  color="primary"
-                  :to="feature.route"
-                  :aria-label="`Explore ${feature.title}`"
-                >
-                  Explore
-                  <v-icon end>mdi-arrow-right</v-icon>
+        <v-row>
+          <v-col v-for="feature in features" :key="feature.title" cols="12" sm="6" md="4">
+            <v-card :to="feature.route" class="feature-card h-100 d-flex flex-column" hover>
+              <div class="feature-icon-bar" :style="{ background: feature.gradient }">
+                <v-icon size="32" color="white">{{ feature.icon }}</v-icon>
+              </div>
+              <v-card-text class="flex-grow-1">
+                <h3 class="text-subtitle-1 font-weight-bold mb-1">{{ feature.title }}</h3>
+                <p class="text-body-2 text-medium-emphasis mb-0">{{ feature.description }}</p>
+              </v-card-text>
+              <v-card-actions class="pt-0">
+                <v-btn variant="text" color="primary" size="small" :to="feature.route">
+                  Explore <v-icon end size="16">mdi-arrow-right</v-icon>
                 </v-btn>
-              </template>
-            </ContentCard>
+              </v-card-actions>
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats-section" aria-labelledby="stats-title">
+    <!-- Stats Bar -->
+    <section class="stats-section">
       <v-container>
-        <v-card class="stats-card" elevation="4">
-          <v-card-text class="pa-8">
-            <h2 id="stats-title" class="sr-only">Platform Statistics</h2>
+        <v-card class="stats-card" variant="tonal" color="primary">
+          <v-card-text>
             <v-row align="center" justify="center">
-              <v-col
-                v-for="stat in stats"
-                :key="stat.label"
-                cols="6"
-                sm="3"
-                class="text-center stat-col"
-              >
-                <div class="stat-icon mb-3">
-                  <v-icon :icon="stat.icon" size="40" color="primary" :aria-hidden="true" />
-                </div>
-                <div class="stat-value text-h4 font-weight-bold text-primary mb-1">
-                  {{ stat.value }}
-                </div>
-                <div class="stat-label text-body-1 text-medium-emphasis">
-                  {{ stat.label }}
-                </div>
+              <v-col v-for="stat in stats" :key="stat.label" cols="6" sm="3" class="text-center">
+                <div class="text-h4 font-weight-bold">{{ stat.value }}</div>
+                <div class="text-caption text-medium-emphasis">{{ stat.label }}</div>
               </v-col>
             </v-row>
           </v-card-text>
+        </v-card>
+      </v-container>
+    </section>
+
+    <!-- Motivational CTA -->
+    <section class="cta-section">
+      <v-container>
+        <v-card class="cta-card text-center pa-8" variant="flat">
+          <v-icon size="48" color="primary" class="mb-3">mdi-lightbulb-on</v-icon>
+          <h2 class="text-h5 font-weight-bold mb-2">Ready to ace your exams?</h2>
+          <p class="text-body-1 text-medium-emphasis mb-5" style="max-width: 500px; margin: 0 auto;">
+            Join thousands of SA learners using quizzes, past papers, and interactive tools to study smarter.
+          </p>
+          <v-btn color="primary" size="large" to="/register" prepend-icon="mdi-account-plus">
+            Create Free Account
+          </v-btn>
         </v-card>
       </v-container>
     </section>
@@ -147,399 +134,222 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-// SEO Meta Tags
 useHead({
-  title: 'SA Learner Assistant - Master Your Studies',
+  title: 'SA Learner Assistant — Study Smarter',
   meta: [
-    {
-      name: 'description',
-      content: 'Comprehensive educational platform for South African high school learners (Grades 8-12). Access interactive quizzes, study materials, forums, and more.'
-    }
+    { name: 'description', content: 'Free educational platform for South African high school learners (Grades 8-12). Quizzes, past papers, video tutorials, games, and career guidance.' }
   ]
 })
 
-const selectedGrade = ref(8)
-const grades = [8, 9, 10, 11, 12]
+const quickAccess = [
+  { title: 'Subjects', icon: 'mdi-book-open-variant', to: '/subjects', bg: 'linear-gradient(135deg,#7C3AED,#A78BFA)' },
+  { title: 'Quizzes', icon: 'mdi-clipboard-check', to: '/quizzes', bg: 'linear-gradient(135deg,#EC4899,#F472B6)' },
+  { title: 'Past Papers', icon: 'mdi-file-document', to: '/past-papers', bg: 'linear-gradient(135deg,#F59E0B,#FBBF24)', iconColor: '#333' },
+  { title: 'Videos', icon: 'mdi-play-circle', to: '/videos', bg: 'linear-gradient(135deg,#EF4444,#F87171)' },
+  { title: 'Learn & Play', icon: 'mdi-gamepad-variant', to: '/games', bg: 'linear-gradient(135deg,#10B981,#34D399)' },
+  { title: 'Careers', icon: 'mdi-compass', to: '/careers', bg: 'linear-gradient(135deg,#3B82F6,#60A5FA)' },
+]
 
 const features = [
   {
     title: 'Interactive Quizzes',
-    description: 'Test your knowledge with chapter-based quizzes and get immediate feedback on your performance',
+    description: 'Test your knowledge with chapter-based quizzes and get instant feedback.',
     icon: 'mdi-clipboard-check',
-    iconColor: 'primary',
-    route: '/subjects'
+    gradient: 'linear-gradient(135deg,#7C3AED,#A78BFA)',
+    route: '/quizzes',
   },
   {
-    title: 'Study Materials',
-    description: 'Access comprehensive chapter content, textbooks, and learning resources for all subjects',
-    icon: 'mdi-book-open-page-variant',
-    iconColor: 'success',
-    route: '/subjects'
-  },
-  {
-    title: 'Community Forums',
-    description: 'Discuss topics, ask questions, and collaborate with fellow learners in our active community',
-    icon: 'mdi-forum',
-    iconColor: 'info',
-    route: '/forums'
-  },
-  {
-    title: 'Past Papers',
-    description: 'Practice with previous exam papers and memorandums to prepare for your exams',
-    icon: 'mdi-file-document',
-    iconColor: 'warning',
-    route: '/subjects'
+    title: 'Past Papers & Memos',
+    description: 'Practice with real exam papers and memorandums filtered by subject and year.',
+    icon: 'mdi-file-document-multiple',
+    gradient: 'linear-gradient(135deg,#F59E0B,#FBBF24)',
+    route: '/past-papers',
   },
   {
     title: 'Video Tutorials',
-    description: 'Watch educational videos and visual explanations to reinforce your learning',
+    description: 'Watch educational videos covering key topics across all your subjects.',
     icon: 'mdi-video',
-    iconColor: 'error',
-    route: '/subjects'
+    gradient: 'linear-gradient(135deg,#EF4444,#F87171)',
+    route: '/videos',
   },
   {
-    title: 'Track Progress',
-    description: 'Monitor your quiz scores, learning achievements, and track your improvement over time',
-    icon: 'mdi-chart-line',
-    iconColor: 'secondary',
-    route: '/profile'
-  }
+    title: 'Learn & Play',
+    description: 'PhET simulations, GeoGebra tools, and educational games to make learning fun.',
+    icon: 'mdi-gamepad-variant',
+    gradient: 'linear-gradient(135deg,#10B981,#34D399)',
+    route: '/games',
+  },
+  {
+    title: 'Career Guidance',
+    description: 'Explore careers, find bursaries, and plan your path after matric.',
+    icon: 'mdi-compass',
+    gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)',
+    route: '/careers',
+  },
+  {
+    title: 'Community Forums',
+    description: 'Ask questions, share tips, and learn together with fellow SA learners.',
+    icon: 'mdi-forum',
+    gradient: 'linear-gradient(135deg,#8B5CF6,#C4B5FD)',
+    route: '/forums',
+  },
 ]
 
 const stats = [
-  {
-    icon: 'mdi-book-multiple',
-    value: '50+',
-    label: 'Subjects'
-  },
-  {
-    icon: 'mdi-file-document-multiple',
-    value: '500+',
-    label: 'Chapters'
-  },
-  {
-    icon: 'mdi-clipboard-check-multiple',
-    value: '1000+',
-    label: 'Quizzes'
-  },
-  {
-    icon: 'mdi-account-group',
-    value: '5000+',
-    label: 'Learners'
-  }
+  { value: '50+', label: 'Subjects' },
+  { value: '500+', label: 'Chapters' },
+  { value: '1 000+', label: 'Questions' },
+  { value: '5 000+', label: 'Learners' },
 ]
 </script>
 
-
 <style scoped lang="scss">
-@import '@/assets/styles/variables.scss';
-
 .home-page {
   min-height: 100vh;
 }
 
-// ============================================
-// Hero Section
-// ============================================
+// Hero
 .hero-section {
+  padding: 48px 0 32px;
+  background: linear-gradient(135deg, rgb(var(--v-theme-surface)) 0%, rgb(var(--v-theme-surface-variant)) 100%);
   position: relative;
-  padding: $spacing-3xl 0;
-  background: linear-gradient(
-    135deg,
-    rgb(var(--v-theme-surface)) 0%,
-    rgb(var(--v-theme-surface-variant)) 100%
-  );
   overflow: hidden;
 
-  // Decorative background pattern
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: radial-gradient(
-      circle at 20% 50%,
-      rgba(var(--v-theme-primary), 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 80%,
-      rgba(var(--v-theme-primary), 0.08) 0%,
-      transparent 50%
-    );
+    inset: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(var(--v-theme-primary), 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(var(--v-theme-primary), 0.06) 0%, transparent 50%);
     pointer-events: none;
   }
-
-  .hero-container {
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-badge {
-    animation: fadeInDown 0.6s ease-out;
-  }
-
-  .hero-title {
-    animation: fadeInUp 0.6s ease-out 0.1s both;
-    line-height: 1.2;
-    
-    .text-primary {
-      background: linear-gradient(
-        135deg,
-        rgb(var(--v-theme-primary)),
-        rgb(var(--v-theme-primary-lighten-1))
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-  }
-
-  .hero-description {
-    animation: fadeInUp 0.6s ease-out 0.2s both;
-    color: rgb(var(--v-theme-on-surface-variant));
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .grade-selector {
-    animation: fadeInUp 0.6s ease-out 0.3s both;
-  }
-
-  .grade-toggle {
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: $spacing-sm;
-    justify-content: center;
-    box-shadow: $shadow-md;
-  }
-
-  .hero-cta {
-    animation: fadeInUp 0.6s ease-out 0.4s both;
-    box-shadow: $shadow-lg;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: $shadow-xl;
-    }
-  }
 }
 
-// ============================================
-// Features Section
-// ============================================
-.features-section {
-  padding: $spacing-3xl 0;
-  background: rgb(var(--v-theme-background));
+.hero-container { position: relative; z-index: 1; }
 
-  .features-grid {
-    margin-top: $spacing-xl;
-  }
-
-  .feature-col {
-    animation: fadeInUp 0.6s ease-out both;
-    
-    @for $i from 1 through 6 {
-      &:nth-child(#{$i}) {
-        animation-delay: #{0.1 * $i}s;
-      }
-    }
-  }
+.gradient-text {
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)), rgb(var(--v-theme-primary-lighten-1)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-// ============================================
-// Stats Section
-// ============================================
-.stats-section {
-  padding: $spacing-3xl 0 $spacing-3xl;
-  background: rgb(var(--v-theme-background));
-
-  .stats-card {
-    background: linear-gradient(
-      135deg,
-      rgb(var(--v-theme-surface)) 0%,
-      rgb(var(--v-theme-surface-variant)) 100%
-    );
-    border: 1px solid rgb(var(--v-theme-outline));
-    animation: fadeInUp 0.6s ease-out 0.5s both;
-  }
-
-  .stat-col {
-    padding: $spacing-lg;
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: translateY(-4px);
-
-      .stat-icon {
-        transform: scale(1.1);
-      }
-    }
-  }
-
-  .stat-icon {
-    transition: transform 0.3s ease;
-  }
-
-  .stat-value {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-  }
+.hero-cta {
+  transition: transform 0.2s;
+  &:hover { transform: translateY(-2px); }
 }
 
-// ============================================
-// Animations
-// ============================================
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+// Illustration
+.hero-illustration {
+  position: relative;
+  width: 280px;
+  height: 280px;
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.illustration-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(var(--v-theme-primary), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px auto 0;
 }
 
-// ============================================
-// Responsive Design
-// ============================================
-
-// Mobile (320-767px)
-@media (max-width: $mobile-max) {
-  .hero-section {
-    padding: $spacing-xl 0;
-
-    .hero-title {
-      font-size: 2rem !important;
-      line-height: 1.3;
-    }
-
-    .hero-description {
-      font-size: 1rem !important;
-    }
-
-    .grade-toggle {
-      width: 100%;
-      
-      :deep(.v-btn) {
-        flex: 1;
-        min-width: 0;
-        min-height: $touch-target-min;
-        padding: 8px 12px;
-      }
-    }
-
-    .hero-cta {
-      width: 100%;
-      min-height: $touch-target-large;
-    }
-  }
-
-  .features-section,
-  .stats-section {
-    padding: $spacing-xl 0;
-  }
-
-  .stats-card {
-    :deep(.v-card-text) {
-      padding: $spacing-lg !important;
-    }
-  }
-
-  .stat-col {
-    padding: $spacing-md !important;
-  }
-
-  .stat-value {
-    font-size: 1.5rem !important;
-  }
-}
-
-// Tablet (768-1023px)
-@media (min-width: $tablet-min) and (max-width: $tablet-max) {
-  .hero-section {
-    padding: $spacing-2xl 0;
-
-    .hero-title {
-      font-size: 2.5rem !important;
-    }
-
-    .hero-description {
-      font-size: 1.125rem !important;
-    }
-  }
-
-  .features-section,
-  .stats-section {
-    padding: $spacing-2xl 0;
-  }
-}
-
-// Desktop (1024px+)
-@media (min-width: $desktop-min) {
-  .hero-section {
-    min-height: 70vh;
-    display: flex;
-    align-items: center;
-  }
-
-  .features-grid {
-    .feature-col {
-      // Ensure equal height cards
-      display: flex;
-      
-      :deep(.content-card) {
-        width: 100%;
-      }
-    }
-  }
-}
-
-// Accessibility - Screen reader only content
-.sr-only {
+.floating-chip {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  animation: float 3s ease-in-out infinite;
+}
+.chip-1 { top: 0; left: 0; animation-delay: 0s; }
+.chip-2 { top: 20px; right: -10px; animation-delay: 1s; }
+.chip-3 { bottom: 10px; left: 10px; animation-delay: 2s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
-// Reduced motion support
-@media (prefers-reduced-motion: reduce) {
-  .hero-badge,
-  .hero-title,
-  .hero-description,
-  .grade-selector,
-  .hero-cta,
-  .feature-col,
-  .stats-card {
-    animation: none;
-  }
+// Quick Access
+.quick-access-section {
+  padding: 32px 0;
+}
 
-  .hero-cta:hover,
-  .stat-col:hover {
-    transform: none;
+.quick-card {
+  border: 1px solid rgb(var(--v-theme-outline));
+  transition: transform 0.2s, border-color 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgb(var(--v-theme-primary));
   }
+}
+
+.quick-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+// Features
+.features-section {
+  padding: 40px 0;
+}
+
+.feature-card {
+  border: 1px solid rgb(var(--v-theme-outline));
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgb(var(--v-theme-primary));
+  }
+}
+
+.feature-icon-bar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Stats
+.stats-section {
+  padding: 24px 0;
+}
+
+.stats-card {
+  border: 1px solid rgba(var(--v-theme-primary), 0.2);
+}
+
+// CTA
+.cta-section {
+  padding: 24px 0 48px;
+}
+
+.cta-card {
+  background: linear-gradient(135deg, rgb(var(--v-theme-surface)) 0%, rgb(var(--v-theme-surface-variant)) 100%);
+  border: 1px solid rgb(var(--v-theme-outline));
+}
+
+// Mobile
+@media (max-width: 767px) {
+  .hero-section { padding: 32px 0 24px; }
+  .hero-title { font-size: 1.75rem !important; }
+  .quick-access-section { padding: 24px 0; }
+  .features-section { padding: 24px 0; }
+  .cta-section { padding: 16px 0 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-chip { animation: none; }
+  .hero-cta:hover { transform: none; }
+  .quick-card:hover, .feature-card:hover { transform: none; }
 }
 </style>

@@ -1,0 +1,110 @@
+# Implementation Plan
+
+- [x] 1. Write bug condition exploration test
+  - **Property 1: Fault Condition** - Past Papers Navigation Bug
+  - **CRITICAL**: This test MUST FAIL on unfixed code - failure confirms the bug exists
+  - **DO NOT attempt to fix the test or the code when it fails**
+  - **NOTE**: This test encodes the expected behavior - it will validate the fix when it passes after implementation
+  - **GOAL**: Surface counterexamples that demonstrate the bug exists
+  - **Scoped PBT Approach**: Scope the property to the concrete failing case - clicking "Past Papers" card on home page
+  - Test that clicking "Past Papers" feature card navigates to `/past-papers` (not `/subjects`)
+  - Test that `/past-papers` page exists and displays subject selection interface
+  - Test that download API method exists in useApi composable
+  - Run test on UNFIXED code
+  - **EXPECTED OUTCOME**: Test FAILS (this is correct - it proves the bug exists)
+  - Document counterexamples found:
+    - "Past Papers" card navigates to `/subjects` instead of `/past-papers`
+    - No `/past-papers` page file exists
+    - No download method in useApi composable
+  - Mark task complete when test is written, run, and failure is documented
+  - _Requirements: 1.1, 1.2, 2.1, 2.2, 2.5, 2.6_
+
+- [x] 2. Write preservation property tests (BEFORE implementing fix)
+  - **Property 2: Preservation** - Other Feature Card Navigation
+  - **IMPORTANT**: Follow observation-first methodology
+  - Observe behavior on UNFIXED code for non-buggy inputs (other feature cards)
+  - Test that "Interactive Quizzes" card navigates to `/subjects`
+  - Test that "Study Materials" card navigates to `/subjects`
+  - Test that "Community Forums" card navigates to `/forums`
+  - Test that "Video Tutorials" card navigates to `/subjects`
+  - Test that "Track Progress" card navigates to `/profile`
+  - Test that direct navigation to `/subjects` displays subjects page correctly
+  - Test that subjects API endpoint continues to work
+  - Write property-based tests capturing observed behavior patterns
+  - Property-based testing generates many test cases for stronger guarantees
+  - Run tests on UNFIXED code
+  - **EXPECTED OUTCOME**: Tests PASS (this confirms baseline behavior to preserve)
+  - Mark task complete when tests are written, run, and passing on unfixed code
+  - _Requirements: 3.1, 3.2, 3.3_
+
+- [x] 3. Fix for Past Papers Download functionality
+
+  - [x] 3.1 Add download method to useApi composable
+    - Open `composables/useApi.ts`
+    - Add `downloadPastPaper` method that calls `GET /api/PastPapers/Download/{fileId}`
+    - Set `responseType: 'blob'` for file download
+    - Return the API client call
+    - _Bug_Condition: isBugCondition(input) where input.clickTarget == "Past Papers feature card" AND input.actualRoute == "/subjects"_
+    - _Expected_Behavior: downloadPastPaper method exists and returns blob response for file downloads_
+    - _Preservation: Existing API methods (getSubjects, getPastPapers, etc.) remain unchanged_
+    - _Requirements: 2.5, 2.6_
+
+  - [x] 3.2 Create past papers page with subject selection and download UI
+    - Create new file `pages/past-papers/index.vue`
+    - Import necessary composables (useApi, useSubjectsStore) and Vuetify components
+    - Add subject selection interface using subjects from store
+    - Implement past papers fetching when subject is selected using `api.getPastPapers(subjectId)`
+    - Display past papers list with year, filename, and download buttons
+    - Add download button for paper that calls `api.downloadPastPaper(pastPaper.id)`
+    - Add download button for memorandum that calls `api.downloadPastPaper(pastPaper.pastMemorandum.id)`
+    - Handle file download trigger and saving
+    - Add loading states while fetching papers
+    - Add error handling for failed API calls
+    - Add empty state when no papers available
+    - Use Vuetify components consistent with existing pages (v-card, v-btn, v-select, etc.)
+    - Ensure responsive design for mobile devices
+    - _Bug_Condition: isBugCondition(input) where input.expectedRoute == "/past-papers" AND page does not exist_
+    - _Expected_Behavior: /past-papers page displays subject selection, fetches papers, and provides download functionality_
+    - _Preservation: Existing pages (/subjects, /forums, /profile) remain unchanged_
+    - _Requirements: 2.2, 2.3, 2.4, 2.5, 2.6_
+
+  - [x] 3.3 Update home page Past Papers route
+    - Open `pages/index.vue`
+    - Locate the features array
+    - Find the "Past Papers" feature object
+    - Change `route: '/subjects'` to `route: '/past-papers'`
+    - Verify other feature card routes remain unchanged
+    - _Bug_Condition: isBugCondition(input) where input.clickTarget == "Past Papers feature card" AND input.actualRoute == "/subjects"_
+    - _Expected_Behavior: Clicking "Past Papers" navigates to /past-papers_
+    - _Preservation: Other feature card routes (Interactive Quizzes → /subjects, Community Forums → /forums, etc.) remain unchanged_
+    - _Requirements: 2.1, 3.1_
+
+  - [x] 3.4 Verify bug condition exploration test now passes
+    - **Property 1: Expected Behavior** - Past Papers Navigation Fixed
+    - **IMPORTANT**: Re-run the SAME test from task 1 - do NOT write a new test
+    - The test from task 1 encodes the expected behavior
+    - When this test passes, it confirms the expected behavior is satisfied
+    - Run bug condition exploration test from step 1
+    - Verify clicking "Past Papers" now navigates to `/past-papers`
+    - Verify `/past-papers` page exists and displays correctly
+    - Verify download API method exists and works
+    - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
+
+  - [x] 3.5 Verify preservation tests still pass
+    - **Property 2: Preservation** - Other Feature Card Navigation Unchanged
+    - **IMPORTANT**: Re-run the SAME tests from task 2 - do NOT write new tests
+    - Run preservation property tests from step 2
+    - Verify all other feature cards still navigate to correct routes
+    - Verify direct `/subjects` access still works
+    - Verify subjects API still returns data correctly
+    - **EXPECTED OUTCOME**: Tests PASS (confirms no regressions)
+    - Confirm all tests still pass after fix (no regressions)
+    - _Requirements: 3.1, 3.2, 3.3_
+
+- [x] 4. Checkpoint - Ensure all tests pass
+  - Run all exploration and preservation tests
+  - Verify no regressions in existing functionality
+  - Test full user flow: home → Past Papers → select subject → download paper/memorandum
+  - Test that other feature cards still work correctly
+  - Ask the user if questions arise

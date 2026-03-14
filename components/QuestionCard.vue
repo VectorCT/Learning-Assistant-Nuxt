@@ -45,9 +45,23 @@
         </v-chip>
       </div>
       
+      <!-- Short Answer / Worked Solution -->
+      <div v-if="isTextAnswer" class="answer-options">
+        <v-textarea
+          :model-value="modelValue[0] || ''"
+          @update:model-value="handleTextAnswer"
+          :disabled="disabled"
+          label="Type your answer here"
+          variant="outlined"
+          rows="4"
+          auto-grow
+          color="primary"
+        />
+      </div>
+
       <!-- Single Selection (Radio) -->
       <v-radio-group
-        v-if="question.maxSelections === 1"
+        v-else-if="question.maxSelections === 1"
         :model-value="modelValue[0]"
         @update:model-value="handleSingleSelect"
         :disabled="disabled"
@@ -137,6 +151,7 @@ interface Props {
     pointValue: number
     options: string[]
     maxSelections: number
+    answerType?: string
   }
   modelValue: string[]
   questionNumber?: number
@@ -160,6 +175,13 @@ const emit = defineEmits<{
 
 const hasAnswer = computed(() => props.modelValue.length > 0)
 
+const isTextAnswer = computed(() => {
+  const type = props.question.answerType?.toLowerCase()
+  return type === 'shortanswer' || type === 'workedsolution' ||
+    (!props.question.options || props.question.options.length === 0 || 
+     (props.question.options.length === 1 && props.question.options[0] === 'N/A'))
+})
+
 const isCorrect = computed(() => {
   if (!props.showCorrectAnswer || !props.correctOptions) return false
   if (props.modelValue.length !== props.correctOptions.length) return false
@@ -168,6 +190,10 @@ const isCorrect = computed(() => {
 
 function handleSingleSelect(value: string) {
   emit('update:modelValue', [value])
+}
+
+function handleTextAnswer(value: string) {
+  emit('update:modelValue', value ? [value] : [])
 }
 
 function handleMultiSelect(option: string, checked: boolean) {

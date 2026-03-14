@@ -1,5 +1,45 @@
 import { defineStore } from 'pinia'
 
+/**
+ * Parse options from various API formats into a flat string array.
+ * Handles:
+ * - ["[\"A\", \"B\", \"C\"]"]  (JSON string inside array)
+ * - ["A. 1956|B. 1960|C. 1976"] (pipe-delimited inside array)
+ * - "[\"A\", \"B\"]" (JSON string directly)
+ * - ["A", "B", "C"] (already correct)
+ */
+export function parseOptions(raw: any): string[] {
+  if (!raw) return []
+
+  // If it's a string, try JSON parse or pipe-split
+  if (typeof raw === 'string') {
+    try {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed)) return parsed.map(String)
+    } catch {}
+    if (raw.includes('|')) return raw.split('|').map((s: string) => s.trim())
+    return [raw]
+  }
+
+  // If it's an array with a single string element, unwrap it
+  if (Array.isArray(raw) && raw.length === 1 && typeof raw[0] === 'string') {
+    const inner = raw[0]
+    // Try JSON parse first
+    try {
+      const parsed = JSON.parse(inner)
+      if (Array.isArray(parsed)) return parsed.map(String)
+    } catch {}
+    // Try pipe-delimited
+    if (inner.includes('|')) return inner.split('|').map((s: string) => s.trim())
+    return [inner]
+  }
+
+  // Already a proper array
+  if (Array.isArray(raw)) return raw.map(String)
+
+  return []
+}
+
 const CACHE_TTL = 5 * 60 * 1000
 
 export const useQuestionsStore = defineStore('questions', {
@@ -60,7 +100,7 @@ export const useQuestionsStore = defineStore('questions', {
         const api = useApi()
         const questions = await api.getQuestionsByChapter(chapterId)
         this.setQuestions(questions, chapterId)
-        return questions
+        return this.getByChapter(chapterId)
       } catch (error: any) {
         this.error = error.message
         throw error
@@ -110,6 +150,30 @@ export const useQuestionsStore = defineStore('questions', {
       const questionIds: string[] = []
       
       for (const question of questions) {
+        // Extract options from answer if nested
+        const answer = question.answers?.[0] || question.answer || {}
+        let options = answer.options || question.options || []
+        
+        options = parseOptions(options)
+        
+        // Generate options for TrueFalse questions
+        const answerType = answer.answerType || question.answerType
+        if (answerType === 'TrueFalse' && (!options || options.length === 0)) {
+          options = ['True', 'False']
+        }
+        // Ensure options is always an array
+        question.options = Array.isArray(options) ? options : []
+        // Default maxSelections to 1 if not set
+        if (!question.maxSelections) {
+          question.maxSelections = 1
+        }
+        if (!question.pointValue) {
+          question.pointValue = question.points || 1
+        }
+        if (!question.answerType) {
+          const answer = question.answers?.[0] || question.answer || {}
+          question.answerType = answer.answerType || 'MultipleChoice'
+        }
         this.entities[question.id] = question
         questionIds.push(question.id)
         

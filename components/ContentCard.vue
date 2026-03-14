@@ -8,17 +8,25 @@
   >
     <!-- Image/Icon Section -->
     <div v-if="image || icon" class="content-card__media">
-      <NuxtImg
+      <v-img
         v-if="image"
         :src="image"
         :alt="imageAlt || title"
-        :width="400"
-        :height="Math.round(400 / imageAspectRatio)"
-        loading="lazy"
-        preset="content"
+        :aspect-ratio="imageAspectRatio"
+        cover
         class="content-card__image"
-        :style="{ aspectRatio: imageAspectRatio }"
-      />
+      >
+        <template #placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular indeterminate color="primary" />
+          </div>
+        </template>
+        <template #error>
+          <div class="d-flex align-center justify-center fill-height bg-surface-variant">
+            <v-icon size="48" color="primary">{{ icon || 'mdi-image-broken' }}</v-icon>
+          </div>
+        </template>
+      </v-img>
       <div v-else-if="icon" class="content-card__icon-wrapper">
         <v-icon :icon="icon" :color="iconColor" size="48" aria-hidden="true" />
       </div>
@@ -39,6 +47,11 @@
       <h3 class="content-card__title text-h6 mb-2">
         {{ title }}
       </h3>
+
+      <!-- Subtitle (for grade/year) -->
+      <p v-if="subtitle" class="content-card__subtitle text-caption text-medium-emphasis mb-2">
+        {{ subtitle }}
+      </p>
 
       <!-- Description -->
       <p v-if="description" class="content-card__description text-body-2 mb-3">
@@ -102,6 +115,7 @@ interface Metadata {
 
 interface Props {
   title: string
+  subtitle?: string
   description?: string
   image?: string
   imageAlt?: string
@@ -200,6 +214,12 @@ function handleClick(event: MouseEvent) {
 
   &__status {
     align-self: flex-start;
+  }
+
+  &__subtitle {
+    color: rgb(var(--v-theme-on-surface-variant));
+    font-weight: 500;
+    line-height: 1.3;
   }
 
   &__title {

@@ -8,7 +8,10 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@mdi/font": "^7.4.0",
@@ -27,8 +30,15 @@
     "vuetify": "^3.5.0"
   },
   "devDependencies": {
+    "@fast-check/vitest": "^0.3.0",
     "@nuxt/devtools": "latest",
     "@types/node": "^25.4.0",
-    "sass": "^1.70.0"
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vitest/ui": "^4.1.0",
+    "@vue/test-utils": "^2.4.6",
+    "fast-check": "^4.6.0",
+    "happy-dom": "^20.8.4",
+    "sass": "^1.70.0",
+    "vitest": "^4.1.0"
   }
 }

@@ -12,3 +12,41 @@
 
 // Import touch target styles (Requirement 4.5)
 @import './touch-targets.scss';
+
+// Global font size adjustments for better density
+html {
+  font-size: 14px; // Reduced from default 16px
+  
+  @media (max-width: 767px) {
+    font-size: 14px; // Keep consistent on mobile
+  }
+  
+  @media (min-width: 1920px) {
+    font-size: 15px; // Slightly larger on very large screens
+  }
+}
+
+// Adjust Vuetify typography to match reduced base size
+.v-application {
+  font-size: 0.875rem; // 14px
+  line-height: 1.5;
+  
+  // Adjust heading sizes proportionally
+  .text-h1 { font-size: 3rem !important; }
+  .text-h2 { font-size: 2.5rem !important; }
+  .text-h3 { font-size: 2rem !important; }
+  .text-h4 { font-size: 1.75rem !important; }
+  .text-h5 { font-size: 1.5rem !important; }
+  .text-h6 { font-size: 1.125rem !important; }
+  
+  // Body text
+  .text-body-1 { font-size: 0.875rem !important; }
+  .text-body-2 { font-size: 0.8125rem !important; }
+  
+  // Captions and overlines
+  .text-caption { font-size: 0.75rem !important; }
+  .text-overline { font-size: 0.625rem !important; }
+  
+  // Buttons
+  .text-button { font-size: 0.875rem !important; }
+}

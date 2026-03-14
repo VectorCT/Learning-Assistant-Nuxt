@@ -44,18 +44,20 @@
             v-for="subject in filteredSubjects"
             :key="subject.id"
             :title="subject.name"
+            :subtitle="`${subject.grade} • ${subject.year}`"
             :description="subject.description"
-            :image="subject.imageUrl"
-            :image-alt="subject.name"
+            :image="subject.subjectImageUrl"
+            :image-alt="`${subject.name} - ${subject.grade}`"
             :to="`/subjects/${subject.id}`"
             :metadata="{
               items: subject.chapters?.length ? `${subject.chapters.length} chapters` : undefined
             }"
-            :icon="!subject.imageUrl ? 'mdi-book-open-page-variant' : undefined"
+            :icon="!subject.subjectImageUrl ? 'mdi-book-open-page-variant' : undefined"
             icon-color="primary"
           >
             <template #actions>
-              <v-btn color="primary" variant="text">
+              <v-spacer />
+              <v-btn color="primary" variant="text" size="small">
                 View Details
               </v-btn>
             </template>

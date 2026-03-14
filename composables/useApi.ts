@@ -96,7 +96,17 @@ export function useApi() {
     deleteReaction: (forumId: string, commentId: string, reactionId: string) => client.delete(`/Forums/${forumId}/comments/${commentId}/reactions/${reactionId}`),
     
     // Past Papers
+    getAllPastPapers: () => client.get('/PastPapers'),
     getPastPapers: (subjectId: string) => client.get(`/PastPapers/${subjectId}`),
+    downloadPastPaper: (fileId: string) => axios.get(`${baseURL}/PastPapers/Download/${fileId}`, {
+      responseType: 'blob',
+      headers: authStore.token ? { Authorization: `Bearer ${authStore.token}` } : {}
+    }),
+    
+    // Video Tutorials
+    getVideoTutorials: () => client.get('/VideoTutorials'),
+    getVideoTutorial: (id: string) => client.get(`/VideoTutorials/${id}`),
+    getVideoTutorialsBySubject: (subjectId: string) => client.get(`/VideoTutorials/subject/${subjectId}`),
     
     // File Upload
     uploadFile: (formData: FormData) => client.post('/Upload', formData, {
