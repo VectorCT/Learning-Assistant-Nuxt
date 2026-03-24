@@ -1,32 +1,32 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  
+
   modules: ['@pinia/nuxt', '@nuxt/image', '@vite-pwa/nuxt'],
-  
+
   css: ['~/assets/styles/main.scss'],
-  
+
   build: {
     transpile: ['vuetify']
   },
-  
+
   vite: {
     ssr: {
       noExternal: ['vuetify']
     }
   },
-  
+
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://localhost:7191/api'
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://vectorct-001-site1.ntempurl.com/api'
     }
   },
-  
+
   image: {
     // Enable image optimization
     quality: 80,
     format: ['webp', 'jpg', 'png'],
-    
+
     // Configure responsive image sizes
     screens: {
       xs: 320,
@@ -36,12 +36,12 @@ export default defineNuxtConfig({
       xl: 1280,
       xxl: 1536
     },
-    
+
     // Configure providers
     providers: {
       // Use default provider for external images
     },
-    
+
     // Enable lazy loading by default
     presets: {
       thumbnail: {
@@ -71,7 +71,7 @@ export default defineNuxtConfig({
       }
     }
   },
-  
+
   app: {
     head: {
       title: 'SA Learner Assistant',
@@ -95,7 +95,7 @@ export default defineNuxtConfig({
       ]
     }
   },
-  
+
   // @ts-ignore - PWA module types
   pwa: {
     registerType: 'autoUpdate',
@@ -186,6 +186,6 @@ export default defineNuxtConfig({
       type: 'module'
     }
   },
-  
+
   compatibilityDate: '2024-01-01'
 })
